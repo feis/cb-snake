@@ -22,12 +22,12 @@ int IsArrowKeyHit() {
 
 Direction GetHitArrowKey() {
 	switch (_getch()) {
-		case 72: return DIRECTION_UP;
-		case 77: return DIRECTION_RIGHT;
-		case 80: return DIRECTION_DOWN;
-		case 75: return DIRECTION_LEFT;
+		case 72: return UP;
+		case 77: return RIGHT;
+		case 80: return DOWN;
+		case 75: return LEFT;
 	}
-	return DIRECTION_NONE;
+	return NONE;
 }
 
 void ClearScreen() {

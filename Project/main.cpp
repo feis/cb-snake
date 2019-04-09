@@ -31,7 +31,7 @@ int main() {
 		DrawField(&field);
 		
 		// 設定蛇的初始前進方向
-		Direction snakeDirection = DIRECTION_RIGHT;
+		Direction snakeDirection = RIGHT;
 
 		while (1) {
 
@@ -50,11 +50,11 @@ int main() {
 			State state = GetState(&field, head);
 
 			// 如果撞到牆壁或蛇身
-			if (state == STATE_WALL || state == STATE_SNAKE)
+			if (state == WALL || state == SNAKE)
 				break;
 	
 			// 如果撞到食物
-			if (state == STATE_FOOD) {
+			if (state == FOOD) {
 				// 設定新的食物位置，設成場地中隨機找的一個空地
 				PlaceFood(&field, RandomlySelectEmptyPosition(&field));
 
@@ -82,7 +82,7 @@ int main() {
 		}
 
 		// 印出 GameOver
-		PrintXY(0, FIELD_HEIGHT, "Game Over!\n");
+		PrintXY(0, HEIGHT, "Game Over!\n");
 		Pause();
 	}
 	return 0;

@@ -1,22 +1,22 @@
 #ifndef _H_FIELD
 #define _H_FIELD
 
-#define FIELD_WIDTH  20
-#define FIELD_HEIGHT 15
+#define WIDTH  20
+#define HEIGHT 15
 
 typedef enum {
-	DIRECTION_NONE  = -1,
-	DIRECTION_UP,
-	DIRECTION_RIGHT,
-	DIRECTION_DOWN,
-	DIRECTION_LEFT
+	NONE  = -1,
+	UP,
+	RIGHT,
+	DOWN,
+	LEFT
 } Direction;
 
 typedef enum {
-	STATE_WALL = -1,
-	STATE_EMPTY,
-	STATE_SNAKE,
-	STATE_FOOD
+	WALL = -1,
+	EMPTY,
+	SNAKE,
+	FOOD
 } State;
 
 typedef struct {
@@ -30,7 +30,7 @@ typedef struct {
 } Cell;
 
 typedef struct {
-	Cell cells[FIELD_WIDTH][FIELD_HEIGHT];
+	Cell cells[WIDTH][HEIGHT];
 } Field;
 
 void InitializeField(Field*);

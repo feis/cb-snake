@@ -3,19 +3,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define FIELD_WIDTH  20
-#define FIELD_HEIGHT 15
+#define WIDTH  20
+#define HEIGHT 15
 
-#define STATE_WALL -1
-#define STATE_EMPTY 0
-#define STATE_SNAKE 1
-#define STATE_FOOD  2
+#define WALL -1
+#define EMPTY 0
+#define SNAKE 1
+#define FOOD  2
 
-#define DIRECTION_NONE  -1
-#define DIRECTION_UP    0
-#define DIRECTION_RIGHT 1
-#define DIRECTION_DOWN  2
-#define DIRECTION_LEFT  3
+#define NONE  -1
+#define UP    0
+#define RIGHT 1
+#define DOWN  2
+#define LEFT  3
 
 void HideCursor();
 int IsArrowKeyHit();
@@ -31,14 +31,14 @@ int main() {
 	
 	while (1) {
 		// 設定場地的初始狀態 (四周為牆壁，中間為空地)
-		int fieldCellStates[FIELD_WIDTH][FIELD_HEIGHT];
-		for (int x = 0; x < FIELD_WIDTH; x++) {
-			for (int y = 0; y < FIELD_HEIGHT; y++) {
-				if (x == 0 || x == FIELD_WIDTH - 1 ||
-					y == 0 || y == FIELD_HEIGHT - 1) {
-					fieldCellStates[x][y] = STATE_WALL;
+		int fieldCellStates[WIDTH][HEIGHT];
+		for (int x = 0; x < WIDTH; x++) {
+			for (int y = 0; y < HEIGHT; y++) {
+				if (x == 0 || x == WIDTH - 1 ||
+					y == 0 || y == HEIGHT - 1) {
+					fieldCellStates[x][y] = WALL;
 				} else {
-					fieldCellStates[x][y] = STATE_EMPTY;
+					fieldCellStates[x][y] = EMPTY;
 				}
 			}
 		}
@@ -52,29 +52,29 @@ int main() {
 		int tailPositionY = headPositionY;
 		
 		// 在場地狀態中，蛇頭的位置放置一個蛇身
-		fieldCellStates[headPositionX][headPositionY] = STATE_SNAKE;
+		fieldCellStates[headPositionX][headPositionY] = SNAKE;
 				
 		// 設定食物的初始位置，設成場地中隨機找的一個空地
 		int foodPositionX, foodPositionY;
 		
 		do {
-			foodPositionX = rand() % FIELD_WIDTH;
-			foodPositionY = rand() % FIELD_HEIGHT;
-		} while (fieldCellStates[foodPositionX][foodPositionY] != STATE_EMPTY);
+			foodPositionX = rand() % WIDTH;
+			foodPositionY = rand() % HEIGHT;
+		} while (fieldCellStates[foodPositionX][foodPositionY] != EMPTY);
 		
 		// 在場地狀態中，食物的位置放置一個食物
-		fieldCellStates[foodPositionX][foodPositionY] = STATE_FOOD;
+		fieldCellStates[foodPositionX][foodPositionY] = FOOD;
 
 		// 把場地依照現在的狀態畫出來 ("牆"、"蛇"、"食" 或 " ")
 		ClearScreen();
-		for (int x = 0; x < FIELD_WIDTH; x++) {
-			for (int y = 0; y < FIELD_HEIGHT; y++) {
+		for (int x = 0; x < WIDTH; x++) {
+			for (int y = 0; y < HEIGHT; y++) {
 				const char *sprite;
 				switch (fieldCellStates[x][y]) {
-					case STATE_WALL:  sprite = "牆"; break;
-					case STATE_EMPTY: sprite = "　"; break;
-					case STATE_SNAKE: sprite = "蛇"; break;
-					case STATE_FOOD:  sprite = "食"; break;
+					case WALL:  sprite = "牆"; break;
+					case EMPTY: sprite = "　"; break;
+					case SNAKE: sprite = "蛇"; break;
+					case FOOD:  sprite = "食"; break;
 				}
 				PrintXY(x, y, sprite);
 			}
@@ -82,9 +82,9 @@ int main() {
 
 		
 		// 設定蛇的初始前進方向
-		int snakeDirection = DIRECTION_RIGHT;
+		int snakeDirection = RIGHT;
 		
-		int fieldCellDirections[FIELD_WIDTH][FIELD_HEIGHT];
+		int fieldCellDirections[WIDTH][HEIGHT];
 
 		while (1) {
 
@@ -99,16 +99,16 @@ int main() {
 			
 			// 依照蛇前進的方向，移動蛇頭的位置一格
 			switch (snakeDirection) {
-				case DIRECTION_UP:
+				case UP:
 					headPositionY--;
 					break;
-				case DIRECTION_RIGHT:
+				case RIGHT:
 					headPositionX++;
 					break;
-				case DIRECTION_DOWN:
+				case DOWN:
 					headPositionY++;
 					break;
-				case DIRECTION_LEFT:
+				case LEFT:
 					headPositionX--;
 					break;
 			}
@@ -116,47 +116,47 @@ int main() {
 			int state = fieldCellStates[headPositionX][headPositionY];
 
 			// 如果撞到牆壁或蛇身
-			if (state == STATE_WALL || state == STATE_SNAKE)
+			if (state == WALL || state == SNAKE)
 				break;
 	
 			// 如果撞到食物
-			if (state == STATE_FOOD) {
+			if (state == FOOD) {
 				// 設定新的食物位置，設成場地中隨機找的一個空地
 				do {
-					foodPositionX = rand() % FIELD_WIDTH;
-					foodPositionY = rand() % FIELD_HEIGHT;
-				} while (fieldCellStates[foodPositionX][foodPositionY] != STATE_EMPTY);
+					foodPositionX = rand() % WIDTH;
+					foodPositionY = rand() % HEIGHT;
+				} while (fieldCellStates[foodPositionX][foodPositionY] != EMPTY);
 
-				fieldCellStates[foodPositionX][foodPositionY] = STATE_FOOD;
+				fieldCellStates[foodPositionX][foodPositionY] = FOOD;
 
         		// 在食物的位置繪製一個 "食" 
 				PrintXY(foodPositionX, foodPositionY, "食");
 			} else {
         		// 將場地狀態中，蛇尾的位置修改為空地
-				fieldCellStates[tailPositionX][tailPositionY] = STATE_EMPTY;
+				fieldCellStates[tailPositionX][tailPositionY] = EMPTY;
 
  				// 在蛇尾位置繪製一個 " "
 				PrintXY(tailPositionX, tailPositionY, "　");
 
         		// 依照場地上在蛇尾位置紀錄的前進的方向移動蛇尾一格
 				switch (fieldCellDirections[tailPositionX][tailPositionY]) {
-				case DIRECTION_UP:
+				case UP:
 					tailPositionY--;
 					break;
-				case DIRECTION_RIGHT:
+				case RIGHT:
 					tailPositionX++;
 					break;
-				case DIRECTION_DOWN:
+				case DOWN:
 					tailPositionY++;
 					break;
-				case DIRECTION_LEFT:
+				case LEFT:
 					tailPositionX--;
 					break;
 				}			
 			}
 
 			// 將場地狀態中，蛇頭的位置修改為蛇身  
-			fieldCellStates[headPositionX][headPositionY] = STATE_SNAKE;
+			fieldCellStates[headPositionX][headPositionY] = SNAKE;
 
 			// 在蛇頭位置繪製一個 "蛇"
 			PrintXY(headPositionX, headPositionY, "蛇");
@@ -166,7 +166,7 @@ int main() {
 		}
 
 		// 印出 GameOver
-		PrintXY(0, FIELD_HEIGHT, "Game Over!\n");
+		PrintXY(0, HEIGHT, "Game Over!\n");
 		Pause();
 	}
 	return 0;
@@ -190,12 +190,12 @@ int IsArrowKeyHit() {
 
 int GetHitArrowKey() {
 	switch (_getch()) {
-		case 72: return DIRECTION_UP;
-		case 77: return DIRECTION_RIGHT;
-		case 80: return DIRECTION_DOWN;
-		case 75: return DIRECTION_LEFT;
+		case 72: return UP;
+		case 77: return RIGHT;
+		case 80: return DOWN;
+		case 75: return LEFT;
 	}
-	return DIRECTION_NONE;
+	return NONE;
 }
 
 void ClearScreen() {

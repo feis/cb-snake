@@ -3,22 +3,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define FIELD_WIDTH  20
-#define FIELD_HEIGHT 15
+#define WIDTH  20
+#define HEIGHT 15
 
 typedef enum {
-	STATE_WALL = -1,
-	STATE_EMPTY,
-	STATE_SNAKE,
-	STATE_FOOD
+	WALL = -1,
+	EMPTY,
+	SNAKE,
+	FOOD
 } State;
 
 typedef enum {
-	DIRECTION_NONE  = -1,
-	DIRECTION_UP,
-	DIRECTION_RIGHT,
-	DIRECTION_DOWN,
-	DIRECTION_LEFT
+	NONE  = -1,
+	UP,
+	RIGHT,
+	DOWN,
+	LEFT
 } Direction;
 
 typedef struct {
@@ -32,7 +32,7 @@ typedef struct {
 } Cell;
 
 typedef struct {
-	Cell cells[FIELD_WIDTH][FIELD_HEIGHT];
+	Cell cells[WIDTH][HEIGHT];
 } Field;
 
 void HideCursor();
@@ -84,7 +84,7 @@ int main() {
 		DrawField(&field);
 		
 		// 設定蛇的初始前進方向
-		Direction snakeDirection = DIRECTION_RIGHT;
+		Direction snakeDirection = RIGHT;
 
 		while (1) {
 			// 如果有敲擊方向鍵
@@ -102,11 +102,11 @@ int main() {
 			State state = GetState(&field, head);
 
 			// 如果撞到牆壁或蛇身
-			if (state == STATE_WALL || state == STATE_SNAKE)
+			if (state == WALL || state == SNAKE)
 				break;
 	
 			// 如果撞到食物
-			if (state == STATE_FOOD) {
+			if (state == FOOD) {
 				// 設定新的食物位置，設成場地中隨機找的一個空地
 				PlaceFood(&field, RandomlySelectEmptyPosition(&field));
 
@@ -134,20 +134,20 @@ int main() {
 		}
 
 		// 印出 GameOver
-		PrintXY(0, FIELD_HEIGHT, "Game Over!\n");
+		PrintXY(0, HEIGHT, "Game Over!\n");
 		Pause();
 	}
 	return 0;
 }
 
 void InitializeField(Field* field) {
-	for (int x = 0; x < FIELD_WIDTH; x++) {
-		for (int y = 0; y < FIELD_HEIGHT; y++) {
-			if (x == 0 || x == FIELD_WIDTH - 1 ||
-				y == 0 || y == FIELD_HEIGHT - 1) {
-				field->cells[x][y].state = STATE_WALL;
+	for (int x = 0; x < WIDTH; x++) {
+		for (int y = 0; y < HEIGHT; y++) {
+			if (x == 0 || x == WIDTH - 1 ||
+				y == 0 || y == HEIGHT - 1) {
+				field->cells[x][y].state = WALL;
 			} else {
-				field->cells[x][y].state = STATE_EMPTY;
+				field->cells[x][y].state = EMPTY;
 			}
 		}
 	}
@@ -155,14 +155,14 @@ void InitializeField(Field* field) {
 
 void DrawField(const Field* field) {
 	ClearScreen();
-	for (int x = 0; x < FIELD_WIDTH; x++) {
-		for (int y = 0; y < FIELD_HEIGHT; y++) {
+	for (int x = 0; x < WIDTH; x++) {
+		for (int y = 0; y < HEIGHT; y++) {
 			const char *sprite;
 			switch (field->cells[x][y].state) {
-				case STATE_WALL:  sprite = "牆"; break;
-				case STATE_EMPTY: sprite = "　"; break;
-				case STATE_SNAKE: sprite = "蛇"; break;
-				case STATE_FOOD:  sprite = "食"; break;
+				case WALL:  sprite = "牆"; break;
+				case EMPTY: sprite = "　"; break;
+				case SNAKE: sprite = "蛇"; break;
+				case FOOD:  sprite = "食"; break;
 			}
 			PrintXY(x, y, sprite);
 		}
@@ -172,22 +172,22 @@ void DrawField(const Field* field) {
 Position RandomlySelectEmptyPosition(const Field* field) {		
 	Position food; 
 	do {
-		food.x = rand() % FIELD_WIDTH;
-		food.y = rand() % FIELD_HEIGHT;
-	} while (field->cells[food.x][food.y].state != STATE_EMPTY);
+		food.x = rand() % WIDTH;
+		food.y = rand() % HEIGHT;
+	} while (field->cells[food.x][food.y].state != EMPTY);
 	return food;
 } 
 
 void PlaceSnake(Field* field, Position pos) {
-	field->cells[pos.x][pos.y].state = STATE_SNAKE;
+	field->cells[pos.x][pos.y].state = SNAKE;
 }
 
 void PlaceFood(Field* field, Position pos) {
-	field->cells[pos.x][pos.y].state = STATE_FOOD;
+	field->cells[pos.x][pos.y].state = FOOD;
 }
 
 void PlaceEmpty(Field* field, Position pos) {
-	field->cells[pos.x][pos.y].state = STATE_EMPTY;
+	field->cells[pos.x][pos.y].state = EMPTY;
 }
  
 void RecordDirection(Field* field, Position pos, Direction direction) {
@@ -204,16 +204,16 @@ Direction GetDirection(const Field* field, Position pos) {
 
 void Move(Position* pos, const Field* field, Direction direction) { 
 	switch (direction) {
-		case DIRECTION_UP:
+		case UP:
 			pos->y--;
 			break;
-		case DIRECTION_RIGHT:
+		case RIGHT:
 			pos->x++;
 			break;
-		case DIRECTION_DOWN:
+		case DOWN:
 			pos->y++;
 			break;
-		case DIRECTION_LEFT:
+		case LEFT:
 			pos->x--;
 			break;
 	}
@@ -241,12 +241,12 @@ int IsArrowKeyHit() {
 
 Direction GetHitArrowKey() {
 	switch (_getch()) {
-		case 72: return DIRECTION_UP;
-		case 77: return DIRECTION_RIGHT;
-		case 80: return DIRECTION_DOWN;
-		case 75: return DIRECTION_LEFT;
+		case 72: return UP;
+		case 77: return RIGHT;
+		case 80: return DOWN;
+		case 75: return LEFT;
 	}
-	return DIRECTION_NONE;
+	return NONE;
 }
 
 void ClearScreen() {
