@@ -1,16 +1,10 @@
-#ifndef _H_FIELD
-#define _H_FIELD
+#ifndef H_FIELD
+#define H_FIELD
+
+#include "direction.h"
 
 #define WIDTH  20
 #define HEIGHT 15
-
-typedef enum {
-	NONE  = -1,
-	UP,
-	RIGHT,
-	DOWN,
-	LEFT
-} Direction;
 
 typedef enum {
 	WALL = -1,

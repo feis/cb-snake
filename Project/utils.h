@@ -1,7 +1,7 @@
-#ifndef _H_UTILS
-#define _H_UTILS 
+#ifndef H_UTILS
+#define H_UTILS 
 
-#include "field.h"
+#include "direction.h"
  
 void HideCursor();
 int IsArrowKeyHit();

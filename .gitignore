@@ -1,0 +1,4 @@
+Project/*.o
+Project/Makefile.win
+Project/Project.exe
+Project/Project.layout
